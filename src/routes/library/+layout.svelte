@@ -1,7 +1,7 @@
 <script lang="ts">
     import TopbarSearch from "$lib/components/topbar-search.svelte"
     import { setContext } from "svelte"
-    import { LibraryController } from "../../controllers/library-controller.svelte";
+    import { LibraryController } from "../../lib/controllers/library-controller.svelte";
     import Button from "$lib/components/button.svelte";
 
     

@@ -1,7 +1,7 @@
 <script lang="ts">
     import ButtonFAB from "$lib/components/button-FAB.svelte";
     import { getContext } from "svelte";
-    import type { LibraryController } from "../../controllers/library-controller.svelte";
+    import type { LibraryController } from "../../lib/controllers/library-controller.svelte";
 
     const lib = getContext<LibraryController>("library_controller")
 </script>

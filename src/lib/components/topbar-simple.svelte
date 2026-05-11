@@ -41,6 +41,7 @@
         position: sticky;
         top: 0;
         container-type: scroll-state;
+        z-index: 1;
     }
 
     @container scroll-state(stuck: top) {

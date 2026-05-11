@@ -2,7 +2,7 @@
     import { setContext } from "svelte"
     import TopbarSimple from "$lib/components/topbar-simple.svelte";
     import BackButton from "$lib/components/topbar-buttons/back-button.svelte";
-    import { BookController } from "../../controllers/book-controller.svelte";
+    import { BookController } from "../../lib/controllers/book-controller.svelte";
 
     
     let { children } = $props()

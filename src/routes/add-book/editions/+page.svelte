@@ -4,7 +4,7 @@
     import Button from '$lib/components/button.svelte';
 
     const page_title = getContext<{ set: (v: string) => string }>("page_title")
-    const previous = page_title.set("Manage covers")
+    const previous = page_title.set("Manage editions")
     onDestroy(() => page_title.set(previous))
 
     const controller = getContext<BookController>("book_controller")
@@ -12,14 +12,14 @@
 
 
 <div class="body">
-    {#if !controller.has_covers}
+    {#if !controller.has_editions}
         <div class="info">
-            <span class="main">No covers added yet.</span>
-            <span>Adding multiple covers lets you choose how this book appears in your library.</span>
+            <span class="main">No files added yet</span>
+            <span>When you have a copy — an EPUB, MOBI, or FVB — add it here as a version. You can have multiple versions of the same book and choose which one you're reading each time.</span>
         </div>
         
         <Button 
-            text="Add cover" 
+            text="Add edition" 
             type="primary" 
         />
     {/if}

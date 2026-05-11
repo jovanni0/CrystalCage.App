@@ -1,26 +1,25 @@
 <script lang="ts">
-    import ChevronRight from "./icons/chevron-right.svelte";
-
     let {
         key = "Key",
-        value = "(None set)"
+        value = $bindable()
     } : {
-        key?: String
-        value?: String
+        key?: string
+        value?: string
     } = $props()
 </script>
 
 
-<button class="entry">
+
+<div class="entry">
     <span class="key">{key}</span>
-    <span 
+    <input 
         class="value"
-        class:none-set={value === "(None set)"}
+        class:none-set={value === undefined}
+        placeholder="(Not set)"
+        bind:value={value}
+        required
     >
-        {value}
-    </span>
-    <ChevronRight />
-</button>
+</div>
 
 
 
@@ -29,13 +28,26 @@
         display: flex;
         flex-direction: row;
         border-bottom: 1px solid var(--dividers);
-        gap: 8px;
         padding: 12px 8px;
         padding-right: 0;
     }
 
     .key {
         min-width: 128px;
+    }
+
+    input {
+        all: unset;
+        background-color: var(--input-fill);
+        padding: 4px 8px;
+        width: 100%;
+        border-radius: 4px;
+        color: var(--text);
+
+        &:valid {
+            color: var(--text);
+            font-style: normal !important;
+        }
     }
 
     .value {

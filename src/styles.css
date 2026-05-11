@@ -43,7 +43,7 @@
     --raised: hsl(var(--raised-hsl));
     --raised-border: hsl(var(--raised-border-hsl));
     --dividers: hsl(var(--dividers-hsl));
-    --lowered: hsl(var(--lowered));
+    --lowered: hsl(var(--lowered-hsl));
     --lowered-border: hsl(var(--lowered-border-hsl));
     --placeholder: hsl(var(--placeholder));
 
