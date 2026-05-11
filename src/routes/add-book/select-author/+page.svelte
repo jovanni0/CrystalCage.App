@@ -22,7 +22,7 @@
         const author = author_picker_controller.getAuthor(selected_author_id)
         
         if (author)
-            book_controller.updateAuthor(author)
+            book_controller.setAuthor(author)
     }
 
     async function createAuthor()
@@ -30,7 +30,10 @@
         const id = await author_picker_controller.createAuthor()
         
         if (id)
+        {
             selected_author_id = id
+            updateAuthor()
+        }
     }
 </script>
 

@@ -1,25 +1,23 @@
 <script lang="ts">
-    import ChevronRight from "./icons/chevron-right.svelte";
-
     let {
         key = "Key",
-        value
+        value = $bindable("")
     } : {
-        key?: String
-        value?: String
+        key?: string
+        value?: string
     } = $props()
 </script>
 
 
-<button class="entry">
+<div class="entry">
     <span class="key">{key}</span>
     <input 
         class="value"
-        class:none-set={value === undefined}
+        class:none-set={!value}
         type="date"
         required
     >
-</button>
+</div>
 
 
 

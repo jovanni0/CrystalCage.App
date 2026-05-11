@@ -1,10 +1,9 @@
 <script lang="ts">
     import { getContext, onDestroy, onMount } from "svelte";
     import { BookController } from "../../../lib/controllers/book-controller.svelte";
-    import FieldAddSeach from "$lib/components/field-add-seach.svelte";
-    import { AuthorPickerController } from "../../../lib/controllers/author-picker-controller.svelte";
-    import ListSelectable from "$lib/components/list-selectable-radio.svelte";
     import { UniversePickerController } from "$lib/controllers/universe-picker-controller.svelte";
+    import FieldAddSeach from "$lib/components/field-add-seach.svelte";
+    import ListSelectable from "$lib/components/list-selectable-radio.svelte";
 
 
     const page_title = getContext<{ set: (v: string) => string }>("page_title")
@@ -47,7 +46,10 @@
         const id = await universe_picker_controller.createUniverse(author_id)
         
         if (id)
+        {
             selected_universe_id = id
+            updateUniverse()
+        }
     }
 </script>
 
@@ -79,7 +81,7 @@
         </div>
     {/if}
 
-    {#if book_controller.author_id && universe_picker_controller.search_query !== ""}
+    {#if book_controller.author_id && universe_picker_controller.search_query.trim() !== ""}
         <button 
             class="create"
             onclick={createUniverse}

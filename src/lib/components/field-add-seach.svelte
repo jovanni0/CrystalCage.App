@@ -12,7 +12,7 @@
 
 <input
     bind:value={value}
-    placeholder="Search or add author..."
+    placeholder={placeholder}
 >
 
 

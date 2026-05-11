@@ -1,55 +1,94 @@
 <script lang="ts">
-    import { getContext, onDestroy } from "svelte";
+    import { getContext, onDestroy, onMount } from "svelte";
     import { BookController } from "../../../lib/controllers/book-controller.svelte";
     import FieldAddSeach from "$lib/components/field-add-seach.svelte";
-    import { AuthorPickerController } from "../../../lib/controllers/author-picker-controller.svelte";
     import ListSelectable from "$lib/components/list-selectable-radio.svelte";
+    import { SeriesPickerController } from "$lib/controllers/series-picker-controller.svelte";
 
 
     const page_title = getContext<{ set: (v: string) => string }>("page_title")
     const previous = page_title.set("Select series")
     onDestroy(() => page_title.set(previous))
 
-    const controller = getContext<BookController>("book_controller")
+    const book_controller = getContext<BookController>("book_controller")
+    const series_picker_controller = new SeriesPickerController()
+    onMount( () => {
+        const universe_id = book_controller.universe_id
 
-    const author_picker_controller = new AuthorPickerController();
+        if (!universe_id)
+            return
 
-    let field_value = $state("")
-    let selected_author_id = $state<string>("")
+        series_picker_controller.requestAllSeries(universe_id)
+    })
+
+    let selected_series_id = $state<string>(book_controller.series_id ?? "")
+
+    /**
+     * update the series record inside the `BookController`.
+     */
+    function updateSeries()
+    {
+        const series = series_picker_controller.getSeries(selected_series_id)
+        
+        if (series)
+            book_controller.selected_series = series
+    }
+
+    /**
+     * create a new series record.
+     */
+    async function createSeries()
+    {
+        const universe_id = book_controller.universe_id
+
+        if (!universe_id) return
+
+        const id = await series_picker_controller.createSeries(universe_id)
+        
+        if (id)
+        {
+            selected_series_id = id
+            updateSeries()
+        }
+    }
 </script>
 
 
 
 <div class="body">
-    <FieldAddSeach 
-        bind:value={field_value}
-        placeholder="Search or add author..."
-    />
+    <div class="search-wrapper">
+        <FieldAddSeach 
+            bind:value={series_picker_controller.search_query}
+            placeholder="Search or add series..."
+        />
+        
+        {#if !book_controller.universe_id}
+            <span class="warning">You need to first select or create a universe!</span>
+        {/if}
+    </div>
 
-    {#if author_picker_controller.has_authors}
+    {#if series_picker_controller.has_series}
         <div class="options">
-            {#each author_picker_controller.authors as author (author.id)}
+            {#each series_picker_controller.series as series (series.id)}
                 <ListSelectable 
-                    label=""
-                    name="author"
-                    value={author.id}
-                    bind:group={selected_author_id}
+                    label={series.name}
+                    name="series"
+                    value={series.id}
+                    bind:group={selected_series_id}
+                    onchange={updateSeries}
                 />
             {/each}
         </div>
     {/if}
 
-    {#if field_value !== ""}
-        <div class="new-option">
-            <button class="create">
-                <span>Create</span>
-                <span class="new-value">{field_value.trim()}</span>
-            </button>
-            
-            {#if !field_value.includes(',')}
-            <span class="warning">Make sure the format is <b>Last, First Name</b> separated with a colon (,) otherwise some features may break.</span>
-            {/if}
-        </div>
+    {#if book_controller.universe_id && series_picker_controller.search_query.trim() !== ""}
+        <button 
+            class="create"
+            onclick={createSeries}
+        >
+            <span>Create</span>
+            <span class="new-value">{series_picker_controller.search_query.trim()}</span>
+        </button>
     {/if}
 </div>
 
@@ -62,8 +101,13 @@
         gap: 20px;
     }
 
-    .options,
-    .new-option {
+    .search-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .options {
         display: flex;
         flex-direction: column;
     }
@@ -85,8 +129,8 @@
     }
 
     .warning {
+        color: var(--red-primary);
         font-size: small;
-        color: var(--text-secondary);
         padding: 0 8px;
     }
 </style>

@@ -1,28 +1,30 @@
 <script lang="ts">
-    import ChevronRight from "./icons/chevron-right.svelte";
-
     let {
         key = "Key",
-        value
+        value = $bindable<number|undefined>(),
+        onchange
     } : {
-        key?: String
-        value?: String
+        key?: string
+        value?: number
+        onchange?: () => void
     } = $props()
 </script>
 
 
-<button class="entry">
+
+<div class="entry">
     <span class="key">{key}</span>
     <input 
         class="value"
-        class:none-set={value === undefined}
+        class:none-set={value == undefined}
         type="number"
         placeholder="0"
         min="1"
-        value={value}
         required
+        onchange={onchange}
+        bind:value={value}
     >
-</button>
+</div>
 
 
 

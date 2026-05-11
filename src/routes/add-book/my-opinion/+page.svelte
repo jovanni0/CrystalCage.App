@@ -6,11 +6,7 @@
     import { markdown } from '@codemirror/lang-markdown'
 
 
-    const page_title = getContext<{ set: (v: string) => string }>("page_title")
-    const previous = page_title.set("My opinion")
-    onDestroy(() => page_title.set(previous))
-
-    const controller = getContext<BookController>("book_controller")
+    // const controller = getContext<BookController>("book_controller")
 
     let editor_el: HTMLDivElement
     let view: EditorView

@@ -27,25 +27,42 @@
             value={book_controller.author_name}
             href="/add-book/select-author"
         />
+
         <ListEntry 
             key="Universe" 
             value={book_controller.universe_name}
             href="/add-book/select-universe"
         />
+
         <ListEntry 
             key="Series" 
+            value={book_controller.series_name}
             href="/add-book/select-series"
         />
-        <ListEntryNumber key="Volume" />
-        <ListEntry key="Title" />
-        <ListEntryText key="Title" />
+
+        <ListEntryNumber 
+            key="Volume" 
+            bind:value={book_controller.volume_number}
+        />
+
+        <ListEntryText 
+            key="Title" 
+            bind:value={book_controller.volume_name}
+        />
     </div>
 
     <div class="list">
         <span class="heading">DETAILS</span>
 
-        <ListEntryDate key="Release date" />
-        <ListEntryNumber key="Word Count" />
+        <ListEntryDate 
+            key="Release date" 
+            bind:value={book_controller.release_date}
+        />
+
+        <ListEntryNumber 
+            key="Word Count" 
+            bind:value={book_controller.word_count}
+        />
     </div>
 
     <ListSingleItemEntry 
