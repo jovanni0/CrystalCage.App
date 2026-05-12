@@ -27,5 +27,9 @@
     .button-placeholder {
         width: 48px;
         height: 48px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 </style>

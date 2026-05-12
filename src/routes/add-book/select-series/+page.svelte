@@ -4,11 +4,12 @@
     import FieldAddSeach from "$lib/components/field-add-seach.svelte";
     import ListSelectable from "$lib/components/list-selectable-radio.svelte";
     import { SeriesPickerController } from "$lib/controllers/series-picker-controller.svelte";
+    import type { TopbarContext } from "$lib/types/topbar-context";
 
 
-    const page_title = getContext<{ set: (v: string) => string }>("page_title")
-    const previous = page_title.set("Select series")
-    onDestroy(() => page_title.set(previous))
+    const topbar = getContext<TopbarContext>("topbar")
+    const old_title = topbar.setTitle("Select series")
+    onDestroy( () => topbar.setTitle(old_title) )
 
     const book_controller = getContext<BookController>("book_controller")
     const series_picker_controller = new SeriesPickerController()

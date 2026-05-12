@@ -4,11 +4,12 @@
     import { UniversePickerController } from "$lib/controllers/universe-picker-controller.svelte";
     import FieldAddSeach from "$lib/components/field-add-seach.svelte";
     import ListSelectable from "$lib/components/list-selectable-radio.svelte";
+    import type { TopbarContext } from "$lib/types/topbar-context";
 
 
-    const page_title = getContext<{ set: (v: string) => string }>("page_title")
-    const previous = page_title.set("Select universe")
-    onDestroy(() => page_title.set(previous))
+    const topbar = getContext<TopbarContext>("topbar")
+    const old_title = topbar.setTitle("Select universe")
+    onDestroy( () => topbar.setTitle(old_title) )
 
     const book_controller = getContext<BookController>("book_controller")
     const universe_picker_controller = new UniversePickerController()

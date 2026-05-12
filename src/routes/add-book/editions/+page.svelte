@@ -2,10 +2,12 @@
     import { getContext, onDestroy } from 'svelte'
     import { BookController } from '../../../lib/controllers/book-controller.svelte';
     import Button from '$lib/components/button.svelte';
+    import type { TopbarContext } from '$lib/types/topbar-context';
 
-    const page_title = getContext<{ set: (v: string) => string }>("page_title")
-    const previous = page_title.set("Manage editions")
-    onDestroy(() => page_title.set(previous))
+
+    const topbar = getContext<TopbarContext>("topbar")
+    const old_title = topbar.setTitle("Manage editions")
+    onDestroy( () => topbar.setTitle(old_title) )
 
     const controller = getContext<BookController>("book_controller")
 </script>

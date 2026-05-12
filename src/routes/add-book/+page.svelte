@@ -5,6 +5,7 @@
     import ListEntry from "$lib/components/list-entry.svelte";
     import ListSingleItemEntry from "$lib/components/list-single-item-entry.svelte";
     import { BookController } from "$lib/controllers/book-controller.svelte";
+    import { marked } from "marked";
     import { getContext } from "svelte";
 
     const book_controller = getContext<BookController>("book_controller")
@@ -75,13 +76,19 @@
         key="MY OPINION"
         placeholder="None set. Tap to add your thoughts on this book."
         href="/add-book/my-opinion"
-    />
+        hasContent={book_controller.my_opinion !== ""}
+    >
+        {@html marked(book_controller.my_opinion ?? "")}
+    </ListSingleItemEntry>
 
     <ListSingleItemEntry 
         key="DESCRIPTION"
         placeholder="None set. Tap to add a description (blurb) to this book."
         href="/add-book/description"
-    />
+        hasContent={book_controller.description !== ""}
+    >
+        {@html marked(book_controller.description ?? "")}
+    </ListSingleItemEntry>
 
     <ListSingleItemEntry 
         key="EDITIONS"
@@ -108,5 +115,9 @@
     .list {
         display: flex;
         flex-direction: column;
+    }
+
+    .text-insert {
+
     }
 </style>

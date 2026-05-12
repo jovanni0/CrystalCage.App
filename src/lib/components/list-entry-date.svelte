@@ -16,6 +16,7 @@
         class:none-set={!value}
         type="date"
         required
+        bind:value={value}
     >
 </div>
 

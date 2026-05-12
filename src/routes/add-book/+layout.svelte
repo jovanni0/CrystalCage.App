@@ -1,35 +1,46 @@
 <script lang="ts">
+    import type { TopbarContext } from "$lib/types/topbar-context";
     import { setContext } from "svelte"
-    import TopbarSimple from "$lib/components/topbar-simple.svelte";
-    import BackButton from "$lib/components/topbar-buttons/back-button.svelte";
     import { BookController } from "../../lib/controllers/book-controller.svelte";
+    import TopbarConfirmCancel from "$lib/components/topbar-confirm-cancel.svelte";
+    import TopbarBack from "$lib/components/topbar-back.svelte";
 
-    
+
     let { children } = $props()
-
-    let title = $state("Add Book")
-    setContext("page_title", { 
-        set: (v: string) => {
-            const previous = title
-            title = v
-            return previous
-        }
-    })
 
     let book_controller = new BookController()
     setContext("book_controller", book_controller)
+    
+    /* topbar config stuff */
+    let on_confirm = $state<(() => void) | undefined>(undefined)
+    let on_cancel = $state<(() => void) | undefined>(undefined)
+    let topbar_mode = $state<"back" | "editor">("back")
+    let topbar_title = $state("Add Book")
+
+    setContext<TopbarContext>("topbar", {
+        setMode: (mode: "back" | "editor") => topbar_mode = mode,
+        setConfirm: (fn: () => void) => on_confirm = fn,
+        setCancel: (fn: () => void) => on_cancel = fn,
+        setTitle: (title: string) => {
+            const previous = topbar_title
+            topbar_title = title
+            return previous
+        },
+    })
 </script>
 
 
 
 <div class="layout-wrapper">
-    <TopbarSimple 
-        title={title}
-    >
-        {#snippet left()}
-            <BackButton />
-        {/snippet}
-    </TopbarSimple>
+    {#if topbar_mode === 'editor'}
+        <TopbarConfirmCancel 
+            onConfirm={on_confirm} 
+            onCancel={on_cancel} 
+            title={topbar_title}
+        />
+    {:else}
+        <TopbarBack title={topbar_title} />
+    {/if}
     
     <main>
         {@render children()} 

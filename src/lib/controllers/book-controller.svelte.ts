@@ -38,6 +38,10 @@ export class BookController
     release_date = $state<string>("")
     word_count = $state<number|undefined>(undefined)
 
+    /* OTHER */
+    my_opinion = $state<string>("")
+    description = $state<string>("")
+
 
     setAuthor(author: Author) 
     {

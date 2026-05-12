@@ -6,14 +6,14 @@
     import ListSelectable from "$lib/components/list-selectable-radio.svelte";
     import { TagController } from "../../../lib/controllers/tag-controller.svelte";
     import ListSelectableCheckbox from "$lib/components/list-selectable-checkbox.svelte";
+    import type { TopbarContext } from "$lib/types/topbar-context";
 
 
-    const page_title = getContext<{ set: (v: string) => string }>("page_title")
-    const previous = page_title.set("Select tags")
-    onDestroy(() => page_title.set(previous))
+    const topbar = getContext<TopbarContext>("topbar")
+    const old_title = topbar.setTitle("Select tags")
+    onDestroy( () => topbar.setTitle(old_title) )
 
-    const controller = getContext<BookController>("book_controller")
-
+    const book_controller = getContext<BookController>("book_controller")
     const tag_controller = new TagController();
 
     let field_value = $state("")

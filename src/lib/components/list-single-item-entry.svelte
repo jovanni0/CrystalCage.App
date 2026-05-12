@@ -1,14 +1,19 @@
 <script lang="ts">
+    import type { Snippet } from "svelte";
     import ChevronRight from "./icons/chevron-right.svelte";
 
     let {
         key = "KEY",
         placeholder = "None set",
-        href
+        href,
+        hasContent = false,
+        children
     } : {
         key?: string
         placeholder?: string
         href?: string
+        hasContent?: boolean
+        children?: Snippet
     } = $props()
 </script>
 
@@ -24,7 +29,13 @@
             <ChevronRight />
         </div>
 
-        <span class="none-set">{placeholder}</span>
+        {#if !hasContent}
+            <span class="none-set">{placeholder}</span>
+        {:else}
+            <div class="content-wrapper">
+                {@render children?.()}
+            </div>
+        {/if}
     </a>
 {:else}
     <button class="entry">
@@ -67,5 +78,24 @@
         font-style: italic;
         color: var(--text-secondary);
         padding: 0 8px;
+    }
+
+    .content-wrapper {
+        flex: 1;
+        padding: 0 8px;
+    }
+
+    :global(.content-wrapper p) {
+        margin: 1.25rem 0;
+        text-align: justify;
+        letter-spacing: 0.03em;
+    }
+
+    :global(.content-wrapper p:first-child) {
+        margin-top: 0;
+    }
+
+    :global(.content-wrapper p:last-child) {
+        margin-bottom: 0;
     }
 </style>

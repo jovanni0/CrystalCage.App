@@ -1,19 +1,35 @@
 <script lang="ts">
-    import { getContext, onDestroy } from 'svelte'
     import { BookController } from '../../../lib/controllers/book-controller.svelte';
-    import { onMount } from 'svelte'
+    import { getContext, onDestroy, onMount } from 'svelte'
     import { EditorView, basicSetup, minimalSetup } from 'codemirror'
     import { markdown } from '@codemirror/lang-markdown'
+    import type { TopbarContext } from '$lib/types/topbar-context';
+    import { goBack } from '../../../utils/go-back';
 
 
-    // const controller = getContext<BookController>("book_controller")
+    const book_controller = getContext<BookController>("book_controller")
+
+    const topbar = getContext<TopbarContext>("topbar")
+    const old_title = topbar.setTitle("My opinion")
+    topbar.setMode("editor")
+    topbar.setConfirm( () => {
+        book_controller.my_opinion = view.state.doc.toString()
+        history.back()
+    })
+    topbar.setCancel(goBack)
+
+    onDestroy( () => {
+        topbar.setMode("back")
+        topbar.setTitle(old_title)
+    })
+
 
     let editor_el: HTMLDivElement
     let view: EditorView
 
     onMount(() => {
         view = new EditorView({
-            doc: '',
+            doc: book_controller.my_opinion,
             extensions: [
                 minimalSetup,
                 markdown(),
