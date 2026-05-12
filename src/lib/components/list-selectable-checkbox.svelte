@@ -4,11 +4,13 @@
     let {
         label,
         value,
-        group = $bindable()
+        group = $bindable(),
+        onchange
     } : {
         label: string
         value: string
         group: string[]
+        onchange?: () => void
     } = $props()
 </script>
 
@@ -18,7 +20,15 @@
     <input 
         type="checkbox"
         value={value}
-        bind:group={group}
+        // bind:group={group}
+        onchange={ () => {
+            if (group.includes(value))
+                group = group.filter(v => v !== value)
+            else
+                group = [...group, value]
+
+            onchange?.()
+        }}
     >
     <span>{label}</span>
     <Checkbox selected={group.includes(value)} />

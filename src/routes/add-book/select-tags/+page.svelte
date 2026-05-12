@@ -1,10 +1,8 @@
 <script lang="ts">
-    import { getContext, onDestroy } from "svelte";
+    import { getContext, onDestroy, onMount } from "svelte";
     import { BookController } from "../../../lib/controllers/book-controller.svelte";
     import FieldAddSeach from "$lib/components/field-add-seach.svelte";
-    import { AuthorPickerController } from "../../../lib/controllers/author-picker-controller.svelte";
-    import ListSelectable from "$lib/components/list-selectable-radio.svelte";
-    import { TagController } from "../../../lib/controllers/tag-controller.svelte";
+    import { TagPickerController } from "../../../lib/controllers/tag-controller.svelte";
     import ListSelectableCheckbox from "$lib/components/list-selectable-checkbox.svelte";
     import type { TopbarContext } from "$lib/types/topbar-context";
 
@@ -14,43 +12,70 @@
     onDestroy( () => topbar.setTitle(old_title) )
 
     const book_controller = getContext<BookController>("book_controller")
-    const tag_controller = new TagController();
+    const tag_picker_controller = new TagPickerController()
+    onMount( () => tag_picker_controller.requestTags() )
 
-    let field_value = $state("")
-    let selected_tag_ids = $state<string[]>([])
+    let selected_tag_ids = $state<string[]>(book_controller.tag_ids)
+
+    /**
+     * update the tag records inside the `BookController`.
+     */
+    function updateTags()
+    {
+        const tags = selected_tag_ids
+            .map( it => tag_picker_controller.getTag(it) )
+            .filter( it => it !== undefined )
+        
+        if (tags.length)
+            book_controller.selected_tags = tags
+
+        console.log(tags)
+    }
+
+    /**
+     * create a new tag record.
+     */
+    async function createTag()
+    {
+        const id = await tag_picker_controller.createTag()
+        
+        if (id)
+        {
+            selected_tag_ids.push(id)
+            updateTags()
+        }
+    }
 </script>
 
 
 
 <div class="body">
     <FieldAddSeach 
-        bind:value={field_value}
+        bind:value={tag_picker_controller.search_query}
         placeholder="Search or add tag..."
     />
 
-    {#if tag_controller.has_tags}
+    {#if tag_picker_controller.has_tags}
         <div class="options">
-            {#each tag_controller.tags as tag (tag.id)}
+            {#each tag_picker_controller.tags as tag (tag.id)}
                 <ListSelectableCheckbox 
                     label={tag.name}
                     value={tag.id}
                     bind:group={selected_tag_ids}
+                    onchange={updateTags}
                 />
             {/each}
         </div>
     {/if}
 
-    {#if field_value !== ""}
-        <div class="new-option">
-            <button class="create">
-                <span>Create</span>
-                <span class="new-value">{field_value.trim()}</span>
-            </button>
-            
-            {#if !field_value.includes(',')}
-            <span class="warning">Make sure the format is <b>Last, First Name</b> separated with a colon (,) otherwise some features may break.</span>
-            {/if}
-        </div>
+    {#if tag_picker_controller.search_query.trim() !== ""}
+        <button 
+            class="create"
+            onclick={createTag}
+        >
+            <span>Create</span>
+            <span class="new-value">{tag_picker_controller.search_query.trim()}</span>
+        </button>
     {/if}
 </div>
 
@@ -63,8 +88,7 @@
         gap: 20px;
     }
 
-    .options,
-    .new-option {
+    .options {
         display: flex;
         flex-direction: column;
     }
@@ -83,12 +107,6 @@
     .new-value {
         color: var(--primary-text);
         font-weight: 600;
-    }
-
-    .warning {
-        font-size: small;
-        color: var(--text-secondary);
-        padding: 0 8px;
     }
 </style>
 

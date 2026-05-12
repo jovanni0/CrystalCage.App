@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Chip from "$lib/components/chip.svelte";
     import ListEntryDate from "$lib/components/list-entry-date.svelte";
     import ListEntryNumber from "$lib/components/list-entry-number.svelte";
     import ListEntryText from "$lib/components/list-entry-text.svelte";
@@ -70,7 +71,14 @@
         key="TAGS"
         placeholder="None set. Tap to select from a preset list or customize from scratch."
         href="/add-book/select-tags"
-    />
+        hasContent={book_controller.selected_tags.length > 0}
+    >
+        <div class="tags">
+            {#each book_controller.selected_tags as tag (tag.id)}
+                <Chip text={tag.name} />
+            {/each}
+        </div>
+    </ListSingleItemEntry>
 
     <ListSingleItemEntry 
         key="MY OPINION"
@@ -117,7 +125,10 @@
         flex-direction: column;
     }
 
-    .text-insert {
-
+    .tags {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
     }
 </style>

@@ -1,5 +1,6 @@
 import type { Author } from "$lib/types/author"
 import type { Series } from "$lib/types/series"
+import type { Tag } from "$lib/types/tag"
 import type { Universe } from "$lib/types/universe"
 
 type Cover = {
@@ -41,6 +42,9 @@ export class BookController
     /* OTHER */
     my_opinion = $state<string>("")
     description = $state<string>("")
+    selected_tags = $state<Tag[]>([])
+
+    tag_ids = $derived(this.selected_tags.map( it => it.id ))
 
 
     setAuthor(author: Author) 
