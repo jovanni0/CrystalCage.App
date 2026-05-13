@@ -4,6 +4,7 @@
     import { BookController } from "../../lib/controllers/book-controller.svelte";
     import TopbarConfirmCancel from "$lib/components/topbar-confirm-cancel.svelte";
     import TopbarBack from "$lib/components/topbar-back.svelte";
+    import { goBack } from "../../utils/go-back";
 
 
     let { children } = $props()
@@ -13,7 +14,7 @@
     
     /* topbar config stuff */
     let on_confirm = $state<(() => void) | undefined>(undefined)
-    let on_cancel = $state<(() => void) | undefined>(undefined)
+    let on_cancel = $state<(() => void) | undefined>(goBack)
     let topbar_mode = $state<"back" | "editor">("editor")
     let topbar_title = $state("Add Book")
 

@@ -1,6 +1,6 @@
 import type { Cover } from "$lib/types/cover";
+import { BASE_URL } from "./author";
 
-export const BASE_URL = 'http://localhost:8080';
 
 
 export async function uploadCover(form_data: FormData): Promise<Cover>

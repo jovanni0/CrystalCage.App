@@ -8,10 +8,18 @@
     import ListEntry from "$lib/components/list-entry.svelte";
     import ListSingleItemEntry from "$lib/components/list-single-item-entry.svelte";
     import { BookController } from "$lib/controllers/book-controller.svelte";
+    import type { TopbarContext } from "$lib/types/topbar-context";
     import { marked } from "marked";
     import { getContext } from "svelte";
 
     const book_controller = getContext<BookController>("book_controller")
+
+    const topbar = getContext<TopbarContext>("topbar")
+    topbar.setConfirm( () => 
+    {
+        book_controller.save()
+        history.back()
+    })
 </script>
 
 
