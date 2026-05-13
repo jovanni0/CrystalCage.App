@@ -8,7 +8,11 @@
 
     const topbar = getContext<TopbarContext>("topbar")
     const old_title = topbar.setTitle("Manage versions")
-    onDestroy( () => topbar.setTitle(old_title) )
+    topbar.setMode("back")
+    onDestroy( () => {
+        topbar.setMode("editor")
+        topbar.setTitle(old_title)
+    })
 
     const book_controller = getContext<BookController>("book_controller")
     const version_controller = book_controller.version_controller

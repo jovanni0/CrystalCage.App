@@ -11,17 +11,13 @@
 
     const topbar = getContext<TopbarContext>("topbar")
     const old_title = topbar.setTitle("My opinion")
-    topbar.setMode("editor")
     topbar.setConfirm( () => {
         book_controller.my_opinion = view.state.doc.toString()
         history.back()
     })
     topbar.setCancel(goBack)
 
-    onDestroy( () => {
-        topbar.setMode("back")
-        topbar.setTitle(old_title)
-    })
+    onDestroy( () => topbar.setTitle(old_title) )
 
 
     let editor_el: HTMLDivElement

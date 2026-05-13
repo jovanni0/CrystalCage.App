@@ -5,9 +5,14 @@
     import type { TopbarContext } from '$lib/types/topbar-context';
     import ListEntryCover from '$lib/components/list-entry-cover.svelte';
 
+    
     const topbar = getContext<TopbarContext>("topbar")
     const old_title = topbar.setTitle("Manage covers")
-    onDestroy( () => topbar.setTitle(old_title) )
+    topbar.setMode("back")
+    onDestroy( () => {
+        topbar.setMode("editor")
+        topbar.setTitle(old_title)
+    })
     
     const book_controller = getContext<BookController>("book_controller")
     const cover_picker_controller = book_controller.cover_picker_controller

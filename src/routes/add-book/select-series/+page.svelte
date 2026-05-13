@@ -9,7 +9,11 @@
 
     const topbar = getContext<TopbarContext>("topbar")
     const old_title = topbar.setTitle("Select series")
-    onDestroy( () => topbar.setTitle(old_title) )
+    topbar.setMode("back")
+    onDestroy( () => {
+        topbar.setMode("editor")
+        topbar.setTitle(old_title)
+    })
 
     const book_controller = getContext<BookController>("book_controller")
     const series_picker_controller = new SeriesPickerController()

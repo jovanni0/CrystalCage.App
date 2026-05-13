@@ -14,7 +14,7 @@
     /* topbar config stuff */
     let on_confirm = $state<(() => void) | undefined>(undefined)
     let on_cancel = $state<(() => void) | undefined>(undefined)
-    let topbar_mode = $state<"back" | "editor">("back")
+    let topbar_mode = $state<"back" | "editor">("editor")
     let topbar_title = $state("Add Book")
 
     setContext<TopbarContext>("topbar", {
