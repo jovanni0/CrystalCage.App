@@ -3,14 +3,13 @@ import type { Series } from "$lib/types/series"
 import type { Tag } from "$lib/types/tag"
 import type { Universe } from "$lib/types/universe"
 import { CoverPickerController } from "./cover-picker-controller.svelte"
+import { VersionController } from "./version-controller.svelte"
 
 
-type Edition = {
-    name: string
-}
 
 export class BookController
 {
+    /* COVERS */
     cover_picker_controller = new CoverPickerController()
     default_cover_id = $state<string>("")
 
@@ -39,8 +38,8 @@ export class BookController
     })
 
 
-    editions = $state<Edition[]>([])
-    has_editions = $derived(this.editions.length > 0)
+    /* VERSIONS */
+    version_controller = new VersionController()
 
 
     /* IDENTITY */
@@ -61,6 +60,7 @@ export class BookController
     /* DETAILS */
     release_date = $state<string>("")
     word_count = $state<number|undefined>(undefined)
+
 
     /* OTHER */
     my_opinion = $state<string>("")

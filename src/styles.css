@@ -69,6 +69,21 @@
 
     --input-fill-hsla: 0 0% 0% / 0.05;
     --input-fill: hsla(var(--input-fill-hsla));
+
+
+    --peach-text-hsl: 22 80% 30%;
+    --peach-secondary-hsl: 22 75% 80%;
+    --mauve-text-hsl: 266 80% 40%;
+    --mauve-secondary-hsl: 266 80% 85%;
+    --teal-text-hsl: 183 74% 20%;
+    --teal-secondary-hsl: 183 45% 75%;
+
+    --peach-text: hsl(var(--peach-text-hsl));
+    --peach-secondary: hsl(var(--peach-secondary-hsl));
+    --mauve-text: hsl(var(--mauve-text-hsl));
+    --mauve-secondary: hsl(var(--mauve-secondary-hsl));
+    --teal-text: hsl(var(--teal-text-hsl));
+    --teal-secondary: hsl(var(--teal-secondary-hsl));
 }
 
 

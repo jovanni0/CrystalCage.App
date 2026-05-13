@@ -1,5 +1,6 @@
 <script lang="ts">
     import { BASE_URL } from "$lib/api/author";
+    import ChipFormat from "$lib/components/chip-format.svelte";
     import Chip from "$lib/components/chip.svelte";
     import ListEntryDate from "$lib/components/list-entry-date.svelte";
     import ListEntryNumber from "$lib/components/list-entry-number.svelte";
@@ -119,10 +120,21 @@
     </ListSingleItemEntry>
 
     <ListSingleItemEntry 
-        key="EDITIONS"
+        key="VERSIONS"
         placeholder="None added. Tap to modify."
-        href="/add-book/editions"
-    />
+        href="/add-book/versions"
+        hasContent={book_controller.version_controller.has_versions}
+    >
+        <div class="versions-wrapper">
+            <div class="chips">
+                {#each book_controller.version_controller.formats as format (format)}
+                    <ChipFormat format={format} />
+                {/each}
+            </div>
+
+            <span>{book_controller.version_controller.format_message}</span>
+        </div>
+    </ListSingleItemEntry>
 </div>
 
 
@@ -172,7 +184,7 @@
 
             & .title {
                 font-weight: 500;
-                font-size: 16px;
+                font-size: large;
             }
 
             & .unset {
@@ -184,6 +196,24 @@
             & .message {
                 color: var(--text-secondary);
             }
+        }
+    }
+
+    .versions-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        & span {
+            padding: 0 8px;
+            font-weight: 500;
+        }
+
+        & .chips {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 4px;
         }
     }
 </style>
