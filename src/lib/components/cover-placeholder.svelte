@@ -20,6 +20,9 @@
         align-items: center;
         justify-content: center;
         background-color: var(--placeholder);
-        color: var(--placeholder);
+        color: var(--text-secondary);
+        width: 100px;
+        height: 150px;
+        border-radius: 8px;
     }
 </style>

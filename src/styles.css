@@ -45,7 +45,7 @@
     --dividers: hsl(var(--dividers-hsl));
     --lowered: hsl(var(--lowered-hsl));
     --lowered-border: hsl(var(--lowered-border-hsl));
-    --placeholder: hsl(var(--placeholder));
+    --placeholder: hsl(var(--placeholder-hsl));
 
     --text: hsl(var(--text-hsl));
     --text-inverted: hsl(var(--text-inverted-hsl));

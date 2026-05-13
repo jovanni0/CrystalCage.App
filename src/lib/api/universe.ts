@@ -1,4 +1,3 @@
-import type { Author } from "$lib/types/author";
 import type { Universe } from "$lib/types/universe";
 import { BASE_URL } from "./author";
 

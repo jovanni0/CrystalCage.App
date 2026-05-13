@@ -5,12 +5,14 @@
         text = "Button",
         type = "primary",
         href = undefined,
-        fill = false
+        fill = false,
+        onClick
     } : {
         text?: string
         type?: ButtonType
         href?: string
         fill?: boolean
+        onClick?: () => void
     } = $props()
 </script>
 
@@ -32,6 +34,7 @@
         class:secondary={type === "secondary"}
         class:passive={type === "passive"}
         class:fill={fill}
+        onclick={onClick}
     >
         <span>{text}</span>
     </button>

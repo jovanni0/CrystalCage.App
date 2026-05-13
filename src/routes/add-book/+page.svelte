@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { BASE_URL } from "$lib/api/author";
     import Chip from "$lib/components/chip.svelte";
     import ListEntryDate from "$lib/components/list-entry-date.svelte";
     import ListEntryNumber from "$lib/components/list-entry-number.svelte";
@@ -19,7 +20,21 @@
         key="COVERS"
         placeholder="None added. Tap to modify."
         href="/add-book/manage-covers"
-    />
+        hasContent={book_controller.has_covers}
+    >
+        <div class="cover-wrapper">
+            <img 
+                src={`${BASE_URL}/covers/${book_controller.default_cover}`}
+                alt="default cover"
+                class="cover-image"
+            />
+
+            <div class="info">
+                <span class="title">{book_controller.default_cover_title}</span>
+                <span class="message">{book_controller.default_cover_message}</span>
+            </div>
+        </div>
+    </ListSingleItemEntry>
 
     <div class="list">
         <span class="heading">IDENTITY</span>
@@ -130,5 +145,36 @@
         flex-direction: row;
         flex-wrap: wrap;
         gap: 4px;
+    }
+
+    .cover-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        align-items: center;
+
+        & .cover-image {
+            width: 75px;
+            height: 112.5px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        & .info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            & .title {
+                font-weight: 500;
+                font-size: 16px;
+            }
+
+            & .message {
+                color: var(--text-secondary);
+            }
+        }
+
+        
     }
 </style>
