@@ -24,13 +24,18 @@
     >
         <div class="cover-wrapper">
             <img 
-                src={`${BASE_URL}/covers/${book_controller.default_cover}`}
+                src={book_controller.default_cover_url}
                 alt="default cover"
                 class="cover-image"
             />
 
             <div class="info">
-                <span class="title">{book_controller.default_cover_title}</span>
+                <span 
+                    class="title"
+                    class:unset={book_controller.default_cover_title === undefined}
+                >
+                    {book_controller.default_cover_title ?? "(No title set)"}
+                </span>
                 <span class="message">{book_controller.default_cover_message}</span>
             </div>
         </div>
@@ -170,11 +175,15 @@
                 font-size: 16px;
             }
 
+            & .unset {
+                font-style: italic;
+                font-weight: 400;
+            }
+
+
             & .message {
                 color: var(--text-secondary);
             }
         }
-
-        
     }
 </style>

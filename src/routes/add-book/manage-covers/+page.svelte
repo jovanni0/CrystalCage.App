@@ -4,41 +4,27 @@
     import Button from '$lib/components/button.svelte';
     import type { TopbarContext } from '$lib/types/topbar-context';
     import ListEntryCover from '$lib/components/list-entry-cover.svelte';
-    import { CoverPickerController } from '$lib/controllers/cover-picker-controller.svelte';
-    import { BASE_URL } from '$lib/api/author';
 
     const topbar = getContext<TopbarContext>("topbar")
     const old_title = topbar.setTitle("Manage covers")
     onDestroy( () => topbar.setTitle(old_title) )
-
+    
     const book_controller = getContext<BookController>("book_controller")
-    const cover_picker_controller = new CoverPickerController()
-    cover_picker_controller.covers = book_controller.covers
-
-    let cover_select_group = $state<string>(book_controller.default_cover)
-
-    console.log(book_controller.default_cover)
+    const cover_picker_controller = book_controller.cover_picker_controller
 
     /* hidden input element to trigger the file selection */
     let file_input: HTMLInputElement
-
-
     async function onFileSelect()
     {
         const file = file_input.files?.[0]
 
         if (!file) return
 
-        await cover_picker_controller.uploadCover(file)
+        const new_id = cover_picker_controller.addCover(file)
+        book_controller.default_cover_id = new_id
+
         file_input.value = ""
     }
-
-    onDestroy( () => {
-        book_controller.covers = cover_picker_controller.covers
-        book_controller.default_cover = cover_select_group
-
-        console.log(cover_select_group)
-    })
 </script>
 
 
@@ -71,13 +57,15 @@
         />
 
         <div class="covers">
-            {#each cover_picker_controller.covers as cover (cover.id)}
+            {#each cover_picker_controller.covers as cover (cover.local_id)}
                 <ListEntryCover 
                     name="cover"
                     input_value={cover.title}
-                    cover_url={`${BASE_URL}/covers/${cover.id}`}
-                    radio_value={cover.id}
-                    bind:radio_group={cover_select_group}
+                    cover_url={cover.preview_url}
+                    radio_value={cover.local_id}
+                    bind:radio_group={book_controller.default_cover_id}
+                    onChange={ (text) => cover_picker_controller.setTitle(cover.local_id, text) }
+                    onDelete={ () => cover_picker_controller.removeCover(cover.local_id) }
                 />
             {/each}
         </div>

@@ -1,8 +1,8 @@
 import type { Author } from "$lib/types/author"
-import type { Cover } from "$lib/types/cover"
 import type { Series } from "$lib/types/series"
 import type { Tag } from "$lib/types/tag"
 import type { Universe } from "$lib/types/universe"
+import { CoverPickerController } from "./cover-picker-controller.svelte"
 
 
 type Edition = {
@@ -11,31 +11,31 @@ type Edition = {
 
 export class BookController
 {
-    covers = $state<Cover[]>([])
-    default_cover = $state<string>("")
+    cover_picker_controller = new CoverPickerController()
+    default_cover_id = $state<string>("")
 
-    has_covers = $derived(this.covers.length > 0)
+    has_covers = $derived(this.cover_picker_controller.has_covers)
     default_cover_title = $derived.by( () => {
-        if (!this.has_covers)
-            return "(No title set)"
+        const cover = this.cover_picker_controller.getCover(this.default_cover_id)
 
-        const cover = this.covers.find(it => it.id === this.default_cover)
-
-        if (!cover)
-            return "(No title set)"
-
-        return cover.title ?? "(No title set)"
+        return cover?.title
     })
     default_cover_message = $derived.by( () =>
     {
-        const count = this.covers.length
+        const count = this.cover_picker_controller.covers.length
 
-        if (count == 0)
+        if (count == 1)
             return "No other options available. Tap to configure"
-        else if (count == 1)
+        else if (count == 2)
             return "1 other option available. Tap to configure"
         else
             return `${count} other options available. Tap to configure`
+    })
+    default_cover_url = $derived.by( () => 
+    {
+        const cover = this.cover_picker_controller.getCover(this.default_cover_id)
+
+        return cover?.preview_url ?? ""
     })
 
 

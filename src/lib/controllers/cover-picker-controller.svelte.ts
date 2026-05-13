@@ -1,38 +1,73 @@
-import { uploadCover } from "$lib/api/cover";
-import type { Cover } from "$lib/types/cover";
+import type { LocalCover } from "$lib/types/local-cover";
 
 
 
 export class CoverPickerController
 {
-    covers = $state<Cover[]>([])
+    covers = $state<LocalCover[]>([])
     is_uploading = $state(false)
     
     has_covers = $derived(this.covers.length > 0)
 
 
-    async uploadCover(cover: File)
+    /**
+     * Create a new local cover record.
+     * @param file The actual cover file uploaded from the user's device
+     */
+    addCover(file: File): string
     {
-        this.is_uploading = true
-
-        try {
-            const form_data = new FormData()
-            form_data.append("cover", cover)
-            
-            const new_cover = await uploadCover(form_data)
-            this.covers.push(new_cover)
-        }
-        catch (e) {
-            console.error(e)
+        const new_local_cover: LocalCover = {
+            local_id: crypto.randomUUID(),
+            file: file,
+            preview_url: URL.createObjectURL(file),
+            title: undefined
         }
 
-        this.is_uploading = false
+        this.covers.push(new_local_cover)
+
+        return new_local_cover.local_id
     }
 
 
-    // async deleteCover(id: string)
-    // {
-    //     await deleteCover(id)
-    //     this.covers = this.covers.filter(it => it.id !== id)
-    // }
+    /**
+     * Remove a cover from the list.
+     * @param local_id The id of the cover being removed.
+     */
+    removeCover(local_id: string): void
+    {
+        const cover = this.covers.find(it => it.local_id === local_id)
+
+        if (cover)
+            URL.revokeObjectURL(cover.preview_url)
+
+        this.covers = this.covers.filter(it => it.local_id !== local_id)
+    }
+
+
+    getCover(local_id: string): LocalCover|undefined
+    {
+        const cover = this.covers.find(it => it.local_id === local_id)
+
+        return cover
+    }
+
+
+    /**
+     * Modify the title of a cover.
+     * @param local_id The id of the cover being modified.
+     * @param title The new title of the cover.
+     */
+    setTitle(local_id: string, title: string): void
+    {
+        const cover = this.covers.find(it => it.local_id === local_id)
+
+        if (cover)
+            cover.title = title
+    }
+
+
+    destroy()
+    {
+        this.covers.forEach(it => URL.revokeObjectURL(it.preview_url))
+    }
 }

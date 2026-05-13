@@ -7,7 +7,6 @@
         radio_value,
         input_value,
         radio_group = $bindable(""),
-        input_group = $bindable(""),
         cover_url = undefined,
         onChange,
         onDelete,
@@ -17,9 +16,8 @@
         radio_value?: string
         input_value?: string
         radio_group?: string
-        input_group?: string
         cover_url?: string
-        onChange?: () => void
+        onChange?: (value: string) => void
         onDelete?: () => void
         onSelected?: () => void
     } = $props()
@@ -52,9 +50,9 @@
                 class="value"
                 class:none-set={input_value === undefined || input_value === ""}
                 placeholder="(No title set)"
-                bind:value={input_group}
+                onchange={ (e) => onChange?.(e.currentTarget.value) }
+                value={input_value}
                 required
-                onchange={onChange}
             >
             <span class="faded">Added Jan 2019</span>
         </div>
