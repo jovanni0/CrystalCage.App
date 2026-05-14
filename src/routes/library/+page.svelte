@@ -1,7 +1,7 @@
 <script lang="ts">
-    import ButtonFAB from "$lib/components/button-FAB.svelte";
     import { getContext } from "svelte";
-    import type { LibraryController } from "../../lib/controllers/library-controller.svelte";
+    import BookCoverGallery from "$lib/components/book-cover-gallery.svelte";
+    import type { LibraryController } from "$lib/controllers/library-controller.svelte";
 
     const lib = getContext<LibraryController>("library_controller")
 </script>
@@ -9,29 +9,27 @@
 
 
 <div class="lib-body">
-
-    <div class="fab">
-        <ButtonFAB />
-    </div>
-    
+    {#each lib.books as book (book.id)}
+        <BookCoverGallery
+            title={book.title}
+            cover_id={book.cover_id}
+        />
+    {/each}
 </div>
 
 
+
 <style>
-    .fab {
-        position: absolute;
-        right: 24px;
-        bottom: 24px;
-        line-height: 0;
-    }
-
     .lib-body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        display: grid;
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(120px, 130px)
+        );
+
+        gap: 16px;
+        padding: 16px;
+
         justify-content: center;
-        height: 100%;
     }
-
-
 </style>

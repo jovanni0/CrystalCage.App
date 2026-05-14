@@ -3,11 +3,14 @@
     import { setContext } from "svelte"
     import { LibraryController } from "../../lib/controllers/library-controller.svelte";
     import Button from "$lib/components/button.svelte";
+    import FAB from "$lib/components/FAB.svelte";
 
     
     let { children } = $props()
 
     let library_controller = new LibraryController()
+    library_controller.fetchAll()
+
     setContext("library_controller", library_controller)
 </script>
 
@@ -34,6 +37,10 @@
         <main>
             {@render children()} 
         </main>
+
+        <div class="fab">
+            <FAB href="/add-book" />
+        </div>
     {/if}
 </div>
 
@@ -65,5 +72,12 @@
         align-items: center;
         color: var(--text-secondary);
         gap: 8px;
+    }
+
+    .fab {
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
+        line-height: 0;
     }
 </style>
